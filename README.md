@@ -148,6 +148,9 @@ This project is licensed under the MIT License.
 
 ---
 
-## 🙋‍♀️ Author
+## GitHub Link
 
 Built by [Gauri Pawar](https://github.com/Gauri-1809/service-request-form.git)
+
+## Hosted Link
+https://service-request-form-one.vercel.app/
