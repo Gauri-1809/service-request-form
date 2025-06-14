@@ -3,6 +3,7 @@ import Step1 from './components/Step1_ChildDetails';
 import Step2 from './components/Step2_ServiceNeeds';
 import Step3 from './components/Step3_ContactInfo';
 import FormNavigation from './components/FormNavigation';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [step, setStep] = useState(1);
@@ -27,7 +28,7 @@ const App = () => {
     } else if (step === 3) {
       if (!formData.parentName) newErrors.parentName = 'Parent name is required';
       if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Valid email is required';
-      if (!formData.phone) newErrors.phone = 'Phone number is required';
+      if (!formData.phone || !/^[0-9]{10}$/.test(formData.phone)) newErrors.phone = 'Valid 10-digit phone is required';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -49,21 +50,52 @@ const App = () => {
   };
 
   if (submitted) {
-    return <div className="p-6 text-center text-green-600 text-xl">Thank you! Your request has been submitted.</div>;
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-success text-center">
+          Thank you! Your request has been submitted.
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-4 border rounded shadow-lg bg-white">
-      <h2 className="text-2xl font-bold mb-4 text-center">Service Request Form</h2>
-      {step === 1 && <Step1 formData={formData} setFormData={setFormData} errors={errors} />}
-      {step === 2 && <Step2 formData={formData} setFormData={setFormData} errors={errors} />}
-      {step === 3 && <Step3 formData={formData} setFormData={setFormData} errors={errors} />}
-      <FormNavigation
-        step={step}
-        handleNext={handleNext}
-        handlePrevious={handlePrevious}
-        handleSubmit={handleSubmit}
-      />
+    <div className="container mt-5">
+      <div className="card shadow">
+        <div className="card-body">
+          <h2 className="card-title text-center mb-4">Service Request Form</h2>
+
+          {/* Progress Bar */}
+          <div className="mb-4">
+            <div className="progress">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: `${(step / 3) * 100}%` }}
+              >
+                Step {step} of 3
+              </div>
+            </div>
+          </div>
+
+          {step === 1 && (
+            <Step1 formData={formData} setFormData={setFormData} errors={errors} />
+          )}
+          {step === 2 && (
+            <Step2 formData={formData} setFormData={setFormData} errors={errors} />
+          )}
+          {step === 3 && (
+            <Step3 formData={formData} setFormData={setFormData} errors={errors} />
+          )}
+
+          <FormNavigation
+            step={step}
+            handleNext={handleNext}
+            handlePrevious={handlePrevious}
+            handleSubmit={handleSubmit}
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,37 +1,58 @@
-const Step2 = ({ formData, setFormData, errors }) => {
-  const handleCheckbox = (value) => {
-    const updated = formData.support.includes(value)
-      ? formData.support.filter((s) => s !== value)
-      : [...formData.support, value];
-    setFormData({ ...formData, support: updated });
+const Step2_ServiceNeeds = ({ formData, setFormData, errors }) => {
+  const supportOptions = ['Speech Therapy', 'Occupational Therapy', 'Behavioral Support'];
+
+  const toggleSupport = (option) => {
+    const current = formData.support.includes(option)
+      ? formData.support.filter((item) => item !== option)
+      : [...formData.support, option];
+    setFormData({ ...formData, support: current });
   };
+
   return (
-    <div className="space-y-4">
-      <div>
-        <label className="block">Type of Support Needed:</label>
-        {['Speech Therapy', 'Behavioral Therapy', 'Occupational Therapy'].map((s) => (
-          <label key={s} className="block">
-            <input type="checkbox" value={s} checked={formData.support.includes(s)} onChange={() => handleCheckbox(s)} /> {s}
-          </label>
+    <div>
+      <div className="mb-3">
+        <label className="form-label">Type of Support Needed</label>
+        {supportOptions.map((option) => (
+          <div className="form-check" key={option}>
+            <input
+              className="form-check-input"
+              type="checkbox"
+              value={option}
+              checked={formData.support.includes(option)}
+              onChange={() => toggleSupport(option)}
+            />
+            <label className="form-check-label">{option}</label>
+          </div>
         ))}
-        {errors.support && <p className="text-red-500 text-sm">{errors.support}</p>}
+        {errors.support && <div className="text-danger">{errors.support}</div>}
       </div>
-      <div>
-        <label className="block">Preferred Frequency:</label>
-        <select value={formData.frequency} onChange={(e) => setFormData({ ...formData, frequency: e.target.value })} className="input">
-          <option value="">Select</option>
-          <option>Weekly</option>
-          <option>Bi-weekly</option>
-          <option>Monthly</option>
+
+      <div className="mb-3">
+        <label className="form-label">Preferred Frequency</label>
+        <select
+          className={`form-select ${errors.frequency ? 'is-invalid' : ''}`}
+          value={formData.frequency}
+          onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
+        >
+          <option value="">Select frequency</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Biweekly">Biweekly</option>
+          <option value="Monthly">Monthly</option>
         </select>
-        {errors.frequency && <p className="text-red-500 text-sm">{errors.frequency}</p>}
+        <div className="invalid-feedback">{errors.frequency}</div>
       </div>
-      <div>
-        <label className="block">Specific Requirements:</label>
-        <textarea value={formData.requirements} onChange={(e) => setFormData({ ...formData, requirements: e.target.value })} className="input" rows={3} />
+
+      <div className="mb-3">
+        <label className="form-label">Any Specific Requirements</label>
+        <textarea
+          className="form-control"
+          rows={3}
+          value={formData.requirements}
+          onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
+        />
       </div>
     </div>
   );
 };
 
-export default Step2;
+export default Step2_ServiceNeeds;
